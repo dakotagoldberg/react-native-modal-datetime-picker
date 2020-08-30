@@ -78,4 +78,4 @@ DateTimePickerModal.defaultProps = {
   onHide: () => {},
 };
 
-export { DateTimePickerModal };
+export default { DateTimePickerModal };
