@@ -47,7 +47,7 @@ class DateTimePickerModal extends React.PureComponent {
     headerTextIOS: "Pick a date",
     modalPropsIOS: {},
     date: new Date(),
-    isDarkModeEnabled: false,
+    isDarkModeEnabled: undefined,
     isVisible: false,
     pickerContainerStyleIOS: {},
   };
@@ -112,6 +112,13 @@ class DateTimePickerModal extends React.PureComponent {
       onHide,
       ...otherProps
     } = this.props;
+    const isAppearanceModuleAvailable = !!(
+      Appearance && Appearance.getColorScheme
+    );
+    const _isDarkModeEnabled =
+      isDarkModeEnabled === undefined && isAppearanceModuleAvailable
+        ? Appearance.getColorScheme() === "dark"
+        : isDarkModeEnabled || false;
 
     const ConfirmButtonComponent = customConfirmButtonIOS || ConfirmButton;
     const CancelButtonComponent = customCancelButtonIOS || CancelButton;
@@ -144,14 +151,14 @@ class DateTimePickerModal extends React.PureComponent {
             onChange={this.handleChange}
           />
           <ConfirmButtonComponent
-            isDarkModeEnabled={isDarkModeEnabled}
+            isDarkModeEnabled={_isDarkModeEnabled}
             onPress={this.handleConfirm}
             label={confirmTextIOS}
             theme={this.props.theme}
           />
         </View>
         <CancelButtonComponent
-          isDarkModeEnabled={isDarkModeEnabled}
+          isDarkModeEnabled={_isDarkModeEnabled}
           onPress={this.handleCancel}
           label={cancelTextIOS}
           theme={this.props.theme}
