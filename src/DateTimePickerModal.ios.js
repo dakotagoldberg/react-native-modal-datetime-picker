@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
+import { StyleSheet, Text, TouchableHighlight, View, Appearance } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Modal from "./Modal";
 import { isIphoneX } from "./utils";
