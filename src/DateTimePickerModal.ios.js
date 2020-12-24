@@ -1,15 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-  View,
-  Appearance,
-} from "react-native";
+import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Modal from "./Modal";
 import { isIphoneX } from "./utils";
+import withTheme from '../../../src/themes/withTheme'
 
 export const BACKGROUND_COLOR_LIGHT = "white";
 export const BACKGROUND_COLOR_DARK = "#0E0E0E";
@@ -23,7 +18,7 @@ export const HIGHLIGHT_COLOR_LIGHT = "#ebebeb";
 export const TITLE_FONT_SIZE = 20;
 export const TITLE_COLOR = "#8f8f8f";
 
-export class DateTimePickerModal extends React.PureComponent {
+class DateTimePickerModal extends React.PureComponent {
   static propTypes = {
     cancelTextIOS: PropTypes.string,
     confirmTextIOS: PropTypes.string,
@@ -130,9 +125,9 @@ export class DateTimePickerModal extends React.PureComponent {
     const HeaderComponent = customHeaderIOS || Header;
     const PickerComponent = customPickerIOS || DateTimePicker;
 
-    const themedContainerStyle = _isDarkModeEnabled
-      ? pickerStyles.containerDark
-      : pickerStyles.containerLight;
+    const themedContainerStyle = isDarkModeEnabled
+      ? {...pickerStyles.containerDark, backgroundColor: this.props.theme.backgroundColor}
+      : {...pickerStyles.containerLight, backgroundColor: this.props.theme.backgroundColor};
 
     return (
       <Modal
@@ -159,12 +154,14 @@ export class DateTimePickerModal extends React.PureComponent {
             isDarkModeEnabled={_isDarkModeEnabled}
             onPress={this.handleConfirm}
             label={confirmTextIOS}
+            theme={this.props.theme}
           />
         </View>
         <CancelButtonComponent
           isDarkModeEnabled={_isDarkModeEnabled}
           onPress={this.handleCancel}
           label={cancelTextIOS}
+          theme={this.props.theme}
         />
       </Modal>
     );
@@ -216,20 +213,18 @@ export const ConfirmButton = ({
   onPress,
   label,
   style = confirmButtonStyles,
+  theme
 }) => {
   const underlayColor = isDarkModeEnabled
     ? HIGHLIGHT_COLOR_DARK
     : HIGHLIGHT_COLOR_LIGHT;
   return (
     <TouchableHighlight
-      style={style.button}
-      underlayColor={underlayColor}
+      style={{...style.button, borderColor: theme.panelColorDark}}
+      underlayColor={theme.panelColor}
       onPress={onPress}
-      accessible={true}
-      accessibilityRole="button"
-      accessibilityLabel={label}
     >
-      <Text style={style.text}>{label}</Text>
+      <Text style={{...style.text, color: theme.accentColor}}>{label}</Text>
     </TouchableHighlight>
   );
 };
@@ -256,23 +251,21 @@ export const CancelButton = ({
   onPress,
   label,
   style = cancelButtonStyles,
+  theme
 }) => {
   const themedButtonStyle = isDarkModeEnabled
-    ? cancelButtonStyles.buttonDark
-    : cancelButtonStyles.buttonLight;
+    ? {...cancelButtonStyles.buttonDark, backgroundColor: theme.backgroundColor}
+    : {...cancelButtonStyles.buttonLight, backgroundColor: theme.backgroundColor}
   const underlayColor = isDarkModeEnabled
     ? HIGHLIGHT_COLOR_DARK
     : HIGHLIGHT_COLOR_LIGHT;
   return (
     <TouchableHighlight
       style={[style.button, themedButtonStyle]}
-      underlayColor={underlayColor}
+      underlayColor={theme.panelColor}
       onPress={onPress}
-      accessible={true}
-      accessibilityRole="button"
-      accessibilityLabel={label}
     >
-      <Text style={style.text}>{label}</Text>
+      <Text style={{...style.text, color: theme.accentColor}}>{label}</Text>
     </TouchableHighlight>
   );
 };
@@ -299,3 +292,5 @@ export const cancelButtonStyles = StyleSheet.create({
     backgroundColor: "transparent",
   },
 });
+
+export default withTheme(DateTimePickerModal)

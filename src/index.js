@@ -1,4 +1,4 @@
-import { DateTimePickerModal } from "./DateTimePickerModal";
+import DateTimePickerModal from "./DateTimePickerModal";
 
 export default DateTimePickerModal;
 
